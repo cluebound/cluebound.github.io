@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Cluebound</title>
+<script>
+(function () {
+  var m = location.pathname.match(/^\/c\/(\d+)/);
+  if (m) {
+    var p = new URLSearchParams(location.search); p.set("case", m[1]);
+    location.replace("/c/?" + p.toString());
+  } else {
+    location.replace("https://apps.apple.com/us/app/cluebound-ai-murder-mystery/id6761445077");
+  }
+})();
+</script></head>
+<body style="background:#0d0d0f;color:#f5f3ef;font-family:-apple-system,sans-serif;padding:24px">
+<p><a style="color:#50c878" href="https://apps.apple.com/us/app/cluebound-ai-murder-mystery/id6761445077">Cluebound on the App Store</a></p>
+</body></html>

@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["48NUUDA3JD.com.cluebound.game"],
+        "components": [
+          { "/": "/c/?*", "comment": "Friend challenges: /c/<case>?q=<questions>&s=<stars>" }
+        ]
+      }
+    ]
+  }
+}

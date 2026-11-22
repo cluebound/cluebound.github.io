@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Can you solve The Hours Between in fewer questions? · Cluebound</title>
+<meta name="description" content="Your friend caught the killer in Cluebound. Question the suspects, catch the lie, beat their score.">
+<meta name="apple-itunes-app" content="app-id=6761445077">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Cluebound">
+<meta property="og:title" content="Can you solve The Hours Between in fewer questions?">
+<meta property="og:description" content="Your friend caught the killer in Cluebound. Question the suspects, catch the lie, beat their score.">
+<meta property="og:url" content="https://cluebound.github.io/c/6/">
+<meta property="og:image" content="https://cluebound.github.io/c/og/6.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Case 6: The Hours Between">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Can you solve The Hours Between in fewer questions?">
+<meta name="twitter:description" content="Your friend caught the killer in Cluebound. Question the suspects, catch the lie, beat their score.">
+<meta name="twitter:image" content="https://cluebound.github.io/c/og/6.jpg">
+<link rel="icon" href="/img/icon.png">
+<link rel="apple-touch-icon" href="/img/icon.png">
+<style>
+:root { color-scheme: dark; --ink: #0d0d0f; --paper: #f5f3ef; --muted: #a9a6a0; --emerald: #50c878; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: var(--ink); color: var(--paper);
+       font: 17px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 560px; margin: 0 auto; padding: 28px 16px 48px; }
+.brand { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.brand img { width: 44px; height: 44px; border-radius: 10px; }
+.brand span { font: 800 18px/1 ui-serif, Georgia, serif; letter-spacing: .3em; color: var(--emerald); }
+.art { width: 100%; aspect-ratio: 1200 / 630; object-fit: cover; border-radius: 14px; display: block;
+       border: 1px solid rgba(255,255,255,.12); }
+.kicker { margin: 24px 0 6px; font: 700 13px/1.2 ui-monospace, Menlo, monospace; letter-spacing: .2em; color: var(--muted); }
+h1 { margin: 0 0 12px; font: 800 30px/1.15 ui-serif, Georgia, serif; }
+.score { margin: 0 0 28px; color: var(--muted); }
+.score b { color: var(--emerald); }
+.button { display: block; text-align: center; text-decoration: none; font-weight: 700; padding: 16px; border-radius: 14px; margin-bottom: 12px; }
+.primary { background: var(--emerald); color: var(--ink); }
+.secondary { border: 1px solid rgba(255,255,255,.25); color: var(--paper); }
+.fine { margin-top: 24px; font-size: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand"><img src="/img/icon.png" alt=""><span>CLUEBOUND</span></div>
+  <img class="art" id="art" src="https://cluebound.github.io/c/og/6.jpg" alt="">
+  <p class="kicker" id="kicker">CASE 06</p>
+  <h1 id="headline">Your friend caught the killer. Can you beat them?</h1>
+  <p class="score" id="score">The Hours Between</p>
+  <a class="button primary" href="https://apps.apple.com/us/app/cluebound-ai-murder-mystery/id6761445077">Get Cluebound on the App Store</a>
+  <a class="button secondary" id="open" href="cluebound://">I have Cluebound: take the challenge</a>
+  <p class="fine">A murder mystery you solve by questioning the suspects. Free to play.</p>
+</main>
+<script>
+(function () {
+  var titles = {1:"The Gala Poisoning",2:"Missing on the 14th Floor",6:"The Hours Between",10:"The Final Broadcast",11:"The Missing Manuscript",14:"'Til Death Do Us Part"}, withArt = [1,2,6,10,11,14];
+  var p = new URLSearchParams(location.search);
+  var m = location.pathname.match(/\/c\/(\d+)/);
+  var n = parseInt(m ? m[1] : p.get("case"), 10);
+  var q = parseInt(p.get("q"), 10), s = parseInt(p.get("s"), 10), unsolved = p.get("u") === "1";
+  var hasCase = n >= 1 && n <= 999, hasScore = q >= 0 && q <= 99;
+  function el(id) { return document.getElementById(id); }
+  if (hasCase) {
+    el("kicker").textContent = "CASE " + (n < 10 ? "0" + n : n);
+    if (titles[n]) el("score").textContent = titles[n];
+    if (withArt.indexOf(n) >= 0) el("art").src = "/c/og/" + n + ".jpg";
+  }
+  if (hasScore) {
+    var stars = unsolved ? "" : " " + "\u2605\u2605\u2605".slice(0, Math.max(0, Math.min(3, s || 0)));
+    el("headline").textContent = unsolved
+      ? "This case fooled your friend. Can you crack it?"
+      : "Your friend caught the killer in " + q + (q === 1 ? " question" : " questions") + ". Can you beat them?";
+    var line = unsolved ? "Your friend: unsolved" : "Your friend: " + q + (q === 1 ? " question" : " questions") + stars;
+    el("score").textContent = (titles[n] ? titles[n] + " \u00b7 " : "") + line;
+  }
+  // Same challenge, through the app's own scheme (a universal link tapped on its own site stays in Safari).
+  if (hasCase) {
+    el("open").href = "cluebound://challenge/" + n + (hasScore ? "?q=" + q + "&s=" + (unsolved ? 0 : (s || 0)) + (unsolved ? "&u=1" : "") : "");
+  }
+})();
+</script>
+</body>
+</html>
