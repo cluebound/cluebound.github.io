@@ -3,21 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Can you solve The Hours Between in fewer questions? · Cluebound</title>
-<meta name="description" content="Your friend caught the killer in Cluebound. Question the suspects, catch the lie, beat their score.">
+<title>Can you solve The Hours Between? · Cluebound</title>
+<meta name="description" content="A friend sent you this case in Cluebound. Question the suspects, catch the lie, name the killer.">
 <meta name="apple-itunes-app" content="app-id=6761445077">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Cluebound">
-<meta property="og:title" content="Can you solve The Hours Between in fewer questions?">
-<meta property="og:description" content="Your friend caught the killer in Cluebound. Question the suspects, catch the lie, beat their score.">
+<meta property="og:title" content="Can you solve The Hours Between?">
+<meta property="og:description" content="A friend sent you this case in Cluebound. Question the suspects, catch the lie, name the killer.">
 <meta property="og:url" content="https://cluebound.github.io/c/6/">
 <meta property="og:image" content="https://cluebound.github.io/c/og/6.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Case 6: The Hours Between">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Can you solve The Hours Between in fewer questions?">
-<meta name="twitter:description" content="Your friend caught the killer in Cluebound. Question the suspects, catch the lie, beat their score.">
+<meta name="twitter:title" content="Can you solve The Hours Between?">
+<meta name="twitter:description" content="A friend sent you this case in Cluebound. Question the suspects, catch the lie, name the killer.">
 <meta name="twitter:image" content="https://cluebound.github.io/c/og/6.jpg">
 <link rel="icon" href="/img/icon.png">
 <link rel="apple-touch-icon" href="/img/icon.png">
@@ -47,7 +47,7 @@ h1 { margin: 0 0 12px; font: 800 30px/1.15 ui-serif, Georgia, serif; }
   <div class="brand"><img src="/img/icon.png" alt=""><span>CLUEBOUND</span></div>
   <img class="art" id="art" src="https://cluebound.github.io/c/og/6.jpg" alt="">
   <p class="kicker" id="kicker">CASE 06</p>
-  <h1 id="headline">Your friend caught the killer. Can you beat them?</h1>
+  <h1 id="headline">A friend sent you this case. Can you catch the killer?</h1>
   <p class="score" id="score">The Hours Between</p>
   <a class="button primary" href="https://apps.apple.com/us/app/cluebound-ai-murder-mystery/id6761445077">Get Cluebound on the App Store</a>
   <a class="button secondary" id="open" href="cluebound://">I have Cluebound: take the challenge</a>
@@ -59,13 +59,23 @@ h1 { margin: 0 0 12px; font: 800 30px/1.15 ui-serif, Georgia, serif; }
   var p = new URLSearchParams(location.search);
   var m = location.pathname.match(/\/c\/(\d+)/);
   var n = parseInt(m ? m[1] : p.get("case"), 10);
-  var q = parseInt(p.get("q"), 10), s = parseInt(p.get("s"), 10), unsolved = p.get("u") === "1";
+  // Whole numbers only, as the app reads them (Int("7x") is no score there either).
+  function whole(v) { return /^\d+$/.test(v || "") ? parseInt(v, 10) : NaN; }
+  var q = whole(p.get("q")), s = whole(p.get("s")), unsolved = p.get("u") === "1";
   var hasCase = n >= 1 && n <= 999, hasScore = q >= 0 && q <= 99;
+  // The sender's first name (n=), cleaned like the app's Challenge.cleanName; else "A friend".
+  var rawName = (p.get("n") || "").trim();
+  var name = rawName.length <= 20 && /^[\p{L} '\u2019-]+$/u.test(rawName) && /\p{L}/u.test(rawName) ? rawName : "";
   function el(id) { return document.getElementById(id); }
   if (hasCase) {
     el("kicker").textContent = "CASE " + (n < 10 ? "0" + n : n);
     if (titles[n]) el("score").textContent = titles[n];
     if (withArt.indexOf(n) >= 0) el("art").src = "/c/og/" + n + ".jpg";
+  }
+  if (hasCase && !hasScore) {
+    // "Play this with a friend": no score, just the case.
+    el("headline").textContent = (name || "A friend") + " wants you to try this case.";
+    el("open").textContent = "I have Cluebound: open the case";
   }
   if (hasScore) {
     var stars = unsolved ? "" : " " + "\u2605\u2605\u2605".slice(0, Math.max(0, Math.min(3, s || 0)));
@@ -77,7 +87,9 @@ h1 { margin: 0 0 12px; font: 800 30px/1.15 ui-serif, Georgia, serif; }
   }
   // Same challenge, through the app's own scheme (a universal link tapped on its own site stays in Safari).
   if (hasCase) {
-    el("open").href = "cluebound://challenge/" + n + (hasScore ? "?q=" + q + "&s=" + (unsolved ? 0 : (s || 0)) + (unsolved ? "&u=1" : "") : "");
+    var query = hasScore ? "q=" + q + "&s=" + (unsolved ? 0 : (s || 0)) + (unsolved ? "&u=1" : "") : "";
+    if (name) query += (query ? "&" : "") + "n=" + encodeURIComponent(name);
+    el("open").href = "cluebound://challenge/" + n + (query ? "?" + query : "");
   }
 })();
 </script>
